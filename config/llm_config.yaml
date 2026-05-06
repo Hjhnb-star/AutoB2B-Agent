@@ -1,0 +1,11 @@
+# config/llm_config.yaml
+# 大模型调用与限制策略
+default:
+  model_name: "gpt-4o"
+  temperature: 0.3
+  max_tokens: 4096
+  top_p: 0.9
+
+fallback:
+  model_name: "gpt-3.5-turbo-16k"
+  temperature: 0.1
