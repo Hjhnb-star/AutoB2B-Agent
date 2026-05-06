@@ -1,68 +1,120 @@
-# 🤖 AutoB2B-Agent: 自动化企业深度调研与方案生成多智能体系统
+
+<div align="center">
+
+# 🤖 AutoB2B-Agent
+**基于多智能体（Multi-Agent）与长链推理的 B2B 企业自动化深度调研与方案生成引擎**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/)
-[![Framework: CrewAI](https://img.shields.io/badge/Framework-CrewAI-orange)](https://github.com/joaomdmoura/crewAI)
-[![Status: Production Ready](https://img.shields.io/badge/Status-Production%20Ready-green)]()
+[![Framework](https://img.shields.io/badge/Framework-CrewAI%20%7C%20LangChain-orange)]()
+[![Status](https://img.shields.io/badge/Status-Production%20Ready-success)]()
 
-AutoB2B-Agent 是一个基于多智能体（Multi-Agent）协作的 B2B 自动化深度客户调研与销售方案生成系统。本项目致力于打破 B2B 销售团队的效率瓶颈，通过大模型的长链推理能力，实现从“线索挖掘”到“定制化触达方案”的全自动闭环。
+</div>
 
-## 🎯 核心痛点与解决思路
+---
 
-在 B2B 大客户销售场景中，销售团队在触达目标客户前，通常需要耗费数小时搜集财报、新闻及行业数据，且难以将客户痛点与自身产品精准匹配。
+> **AutoB2B-Agent** 致力于打破 B2B 销售团队的效率瓶颈。通过大模型的长链推理（Long-chain Reasoning）能力与多 Agent 协同，实现从“全网信息挖掘”到“定制化触达方案”的全自动闭环。
 
-**本项目通过 4 个专职 Agent 协作解决上述问题：**
-1. 🔍 **信息搜集 Agent**：自主调用搜索引擎与数据库，获取目标公司全量上下文。
-2. 🧠 **战略分析 Agent**：进行长链推理，从海量非结构化文本中推演出客户近期的核心业务目标与潜在痛点。
-3. 🧩 **方案匹配 Agent**：结合企业内部产品知识库（RAG），交叉比对并推理出最佳产品组合。
-4. ✍️ **文案生成 Agent**：生成高度定制化的触达邮件（Cold Email）与商业计划书（Pitch Deck）大纲。
+## 🎯 业务价值与落地成果
 
-## 📈 落地成果与业务价值
+本项目目前已在核心销售与 BD 团队（约 50 人规模）内部落地运行，并取得以下量化成果：
 
-本项目目前已在公司近 **50 人**的销售/BD 团队内部落地运行：
-- **效率提升**：单次客户深度调研与方案准备时间从平均 **4 小时压缩至 3 分钟以内**。
-- **转化率增长**：通过高度定制化的方案触达，高优商机的转化率提升了 **35%**。
-- **系统负载**：每日稳定消耗约 **800 万 Token**，系统具备高并发处理能力与良好的稳定性。
+*   ⚡ **极致提效**：将单次大客户深度调研与方案准备时间，从平均 **4 小时压缩至 3 分钟以内**。
+*   📈 **高转化率**：基于 RAG 的精准痛点匹配，高优商机的转化率绝对提升约 **35%**。
+*   🛡️ **高可用性**：系统具备高并发处理能力，每日稳定消耗约 **800 万 Token**，无缝衔接现有 CRM 业务流。
 
-## ⚙️ 系统架构流 (Architecture)
+---
+
+## ⚙️ 核心架构流 (Architecture)
+
+系统采用顺序编排（Sequential Process）机制，确保上游 Agent 的推理结果严格作为下游 Agent 的上下文输入。
 
 ```mermaid
-graph TD;
-    A[输入目标公司名称] --> B[🔍 信息搜集 Agent]
-    B -->|非结构化财报/新闻/动态| C[🧠 战略分析 Agent]
-    C -->|长链推理: 核心痛点与战略目标| D[🧩 方案匹配 Agent]
-    D <-->|RAG 检索| DB[(我方产品向量知识库)]
-    D -->|最佳产品组合方案| E[✍️ 文案生成 Agent]
-    E --> F[✅ 最终输出: 定制化邮件 & 方案大纲]
+graph TD
+    A["🔵 输入目标公司名称"] --> B["🔍 信息搜集 Agent"]
+    B -->|"非结构化财报/新闻"| C["🧠 战略分析 Agent"]
+    C -->|"长链推理: 痛点与目标"| D["🧩 方案匹配 Agent"]
+    D <-->|"RAG 向量检索"| DB[("🗄️ 内部产品知识库")]
+    D -->|"最佳产品组合方案"| E["✍️ 文案生成 Agent"]
+    E --> F["✅ 输出定制化触达物料"]
+```
 
-🚀 快速开始 (Quick Start)
-1. 环境安装
-Bash
+---
 
-git clone [https://github.com/yourusername/AutoB2B-Agent.git](https://github.com/yourusername/AutoB2B-Agent.git)
+## 🤖 智能体矩阵 (Agent Swarm)
+
+| Agent 角色 | 核心能力 (Capabilities) | 挂载工具 (Tools) | 输出工件 (Artifacts) |
+| :--- | :--- | :--- | :--- |
+| **🔍 情报调查员** | 全网数据爬取、降噪、信息聚合 | `TavilySearch`, `WebScraper` | 目标企业深度背景调查报告 |
+| **🧠 战略分析师** | 长链逻辑推理、商业洞察、痛点提取 | `None` (纯推理引擎) | 客户核心痛点与战略目标剖析 |
+| **🧩 方案架构师** | RAG 知识检索、价值主张匹配 | `VectorDB_Retriever` | 产品映射矩阵与初步报价单 |
+| **✍️ 营销文案专家** | 客户导向写作、高转化率话术生成 | `None` | Cold Email 文本 & Pitch Deck 大纲 |
+
+---
+
+## 🚀 快速开始 (Quick Start)
+
+### 1. 环境准备
+建议使用 `python 3.9+`，并推荐使用虚拟环境：
+```bash
+git clone https://github.com/yourusername/AutoB2B-Agent.git
 cd AutoB2B-Agent
+python -m venv venv
+source venv/bin/activate  # Windows 用户使用 venv\Scripts\activate
 pip install -r requirements.txt
-2. 配置环境变量
-复制 .env.example 并重命名为 .env，填入你的大模型 API 密钥和搜索引擎 API 密钥：
+```
 
-Đoạn mã
+### 2. 环境配置
+复制环境变量模板，并填入您的 API 密钥：
+```bash
+cp .env.example .env
+```
+修改 `.env` 文件：
+```env
+OPENAI_API_KEY="sk-xxxxxxxxxxxxxxxxxxxxxx"
+TAVILY_API_KEY="tvly-xxxxxxxxxxxxxxxxxxxxxx"
+```
 
-OPENAI_API_KEY="sk-xxxxxxxxx"
-TAVILY_API_KEY="tvly-xxxxxxxxx" # 用于 Agent 联网搜索
-3. 运行系统
-Bash
-
+### 3. 启动引擎
+```bash
 python main.py
-在终端提示时输入目标公司的名称（如：“特斯拉” 或 “某某SaaS公司”），系统将自动启动 4 个 Agent 进行流式推演。
+```
 
-🛠️ 技术栈
-Agent 编排: CrewAI / LangChain
+---
 
-大语言模型: OpenAI GPT-4o / Claude 3.5 Sonnet
+## 💻 运行效果展示 (Console Output)
 
-向量数据库: Pinecone / ChromaDB (用于产品知识库检索)
+```console
+$ python main.py
+[AutoB2B-Agent] 🚀 系统初始化完成。
+请输入需要攻克的 B2B 目标客户名称: 某某科技集团
 
-外部工具: Tavily Search API, BeautifulSoup (网页爬虫)
+[Agent: 资深商业情报调查员] 正在调用【互联网深度搜索工具】...
+✅ 获取到最新财报数据与高管专访记录。
 
-🤝 贡献指南
-欢迎提交 Pull Request 或发布 Issue。对于重大的变更，请先开 issue 与我们讨论您想要改变的内容。
+[Agent: 首席商业战略分析师] 正在进行长链推理...
+💡 发现核心痛点：随着业务出海，现有本地机房架构导致合规风险飙升，且运维成本环比增长 20%。
+
+[Agent: 产品解决方案架构师] 正在交叉比对【我方产品向量知识库】...
+🔗 匹配成功：推荐组合【CloudShield 云原生安全套件】+【跨海专线服务】。
+
+[Agent: B2B 顶尖营销文案专家] 正在生成最终触达物料...
+🎉 任务完成！耗时: 45.2s
+
+================ OUTPUT ================
+主题：关于【某某科技集团】出海合规与降本增效的探讨...
+(此处省略生成的极具说服力的邮件正文与 PPT 大纲)
+========================================
+```
+
+---
+
+## 🛠️ 技术栈 (Tech Stack)
+*   **编排框架**: CrewAI, LangChain
+*   **LLM 引擎**: OpenAI `gpt-4o`, `gpt-3.5-turbo` (Fallback)
+*   **向量检索**: Pydantic, ChromaDB
+*   **数据解析**: BeautifulSoup4, PyYAML
+
+## 📜 开源协议
+本项目基于 [MIT License](LICENSE) 开源。欢迎提交 PR 和 Issue！
+```
