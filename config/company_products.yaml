@@ -1,0 +1,18 @@
+# config/company_products.yaml
+# 我方产品线定义（模拟数据）
+company_name: "TechNova 智擎科技"
+products:
+  - name: "AutoFlow 自动化流程引擎"
+    keywords: ["效率低", "人工", "繁琐", "降本增效", "流程"]
+    description: "通过 RPA + AI 技术，自动处理企业内部的报销、审批等重复性工作，节省 60% 人力成本。"
+    pricing: "订阅制，约 ¥50,000 / 年"
+    
+  - name: "DataInsight 商业智能中台"
+    keywords: ["数据孤岛", "看不清", "决策", "报表", "系统老旧"]
+    description: "打通企业底层数据，提供实时可视化的经营看板，辅助高管进行数据驱动决策。"
+    pricing: "私有化部署，基础版 ¥150,000 起"
+    
+  - name: "CloudShield 云原生安全套件"
+    keywords: ["合规", "安全", "泄露", "被黑", "出海"]
+    description: "符合 GDPR 规范的企业级云安全防护，防止敏感数据泄露，保障出海业务合规。"
+    pricing: "按流量计费，月均 ¥10,000"
